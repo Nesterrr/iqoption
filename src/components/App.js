@@ -3,7 +3,7 @@ import moment from 'moment';
 
 class App extends Component {
     render() {
-        const monthDate = moment().startOf('month').daysInMonth();
+        const monthDate = moment().startOf('month').daysInMonth(1);
         const firstDay = moment(moment())
             .startOf("month")
             .format("d"); 
