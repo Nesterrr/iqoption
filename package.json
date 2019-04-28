@@ -6,11 +6,13 @@
   "scripts": {
     "start": "webpack-dev-server --mode development --open --hot",
     "build": "webpack --mode production",
-    "flow": "flow"
+    "flow": "flow",
+    "lint": "eslint ./src"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@emotion/core": "^10.0.10",
     "moment": "^2.24.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
@@ -18,9 +20,12 @@
   "devDependencies": {
     "@babel/core": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
+    "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
+    "@emotion/babel-preset-css-prop": "^10.0.9",
     "babel-cli": "^6.26.0",
     "babel-loader": "^8.0.5",
+    "babel-plugin-emotion": "^10.0.9",
     "babel-preset-flow": "^6.23.0",
     "css-loader": "^2.1.1",
     "eslint": "^5.16.0",

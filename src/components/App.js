@@ -1,18 +1,17 @@
 import React, { Component } from "react";
+import { css } from '@emotion/core';
+import { Month } from './Month.js';
 import moment from 'moment';
 
+const calendarContainer = css`
+    margin-top: 10px;
+`;
 class App extends Component {
     render() {
-        const monthDate = moment().startOf('month').daysInMonth(1);
-        const firstDay = moment(moment())
-            .startOf("month")
-            .format("d"); 
-
-        console.log('monthDate: ', monthDate);
-        console.log('firstDay: ', firstDay);
         return (
-            <div>
-                <h1>My React App!</h1>
+            <div css={calendarContainer}>
+                <Month monthNumber="3" />
+                <Month monthNumber="4" />
             </div>
         );
     }
