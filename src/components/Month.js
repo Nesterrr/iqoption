@@ -2,92 +2,59 @@
 import React from "react";
 import { css } from '@emotion/core';
 import moment from 'moment';
+import type Moment from 'moment';
 import { range } from '../utils/range';
+import { Day } from './Day';
+import OffsetDays from './OffsetDays';
 
 type Props = {
-    monthNumber: number | string,
+    monthNumber: Moment,
 };
 
-const dayContainer = css`
-    width: 200px;
-    height: 200px;
-    list-style: none;
-    outline: 1px solid green;
-`;
-
-const monthContainer = css`
+const monthContainer = (isOffsetExist) => css`
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 2px;
+    gap: 0;
+    width: 600px;
     margin: 0;
     padding: 0;
+    margin-top: ${isOffsetExist ? `-200px` : `0`};
+
+    &:first-child {
+        margin-top: 0;
+    }
 `;
 
 export const Month = React.memo(({
-    monthNumber,
+    currentDate,
 }: Props) => {
-    const currentData = moment();
-    const firstDayOfMonth = currentData
-        .set("month", monthNumber)
+    const firstDayOfMonth = moment(currentDate)
         .startOf("month")
         .format("d");
-    const daysInMonth = range(1, currentData.daysInMonth());
+    const daysInMonth = range(1, moment(currentDate).daysInMonth());
+    const isOffsetExist = firstDayOfMonth > 1;
 
-    console.log(
-        'firstDayOfMonth: ',
-        firstDayOfMonth,
-        daysInMonth,
-    );
+    let today = null;
+    if (moment(currentDate).month() === moment().month()) {
+        today = parseInt(moment(currentDate).format("D"));
+    }
+
     return (
-        <ul css={monthContainer}>
+        <ul css={monthContainer(isOffsetExist)}>
             {
-                firstDayOfMonth > 1
+                isOffsetExist
                 ? <OffsetDays firstDayOfMonth={firstDayOfMonth} />
                 : null
             }
             {
                 daysInMonth.map((day) => (
-                    <li
+                    <Day
+                        number={day}
                         key={day}
-                        css={dayContainer}
-                    >
-                        {day}
-                    </li>
+                        isToday={today === day}
+                    />
                 ))
             }
         </ul>
     );
 });
-
-const offsetDay = css`
-    position: static;
-`;
-
-const OffsetDays = React.memo(({ firstDayOfMonth }) => {
-    const emptyBlocks = range(1, parseInt(firstDayOfMonth) - 1);
-    return (
-        <React.Fragment>
-            {
-                emptyBlocks.map((offsetDay) => {
-                    const key = `${offsetDay}-offset`;
-                    return (
-                        <Day
-                            key={key}
-                            number={0}
-                        />
-                    )
-                })
-            }
-        </React.Fragment>
-    )
-});
-
-const Day = React.memo(({ number }) => (
-    <li css={dayContainer}>
-        {
-            number === 0
-            ? ("")
-            : { number }
-        }
-    </li>
-));
