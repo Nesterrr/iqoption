@@ -11,23 +11,26 @@ type Props = {
     monthNumber: Moment,
 };
 
-const monthContainer = (isOffsetExist) => css`
+const monthContainer = (isOffsetExist, prevMonthLength) => css`
+    position: relative;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 0;
     width: 600px;
-    margin: 0;
     padding: 0;
     margin-top: ${isOffsetExist ? `-200px` : `0`};
 
     &:first-child {
         margin-top: 0;
+        // margin-top: ${prevMonthLength};
     }
 `;
 
-export const Month = React.memo(({
+export const Month = React.memo(React.forwardRef(({
     currentDate,
-}: Props) => {
+}: Props,
+    ref,
+) => {
     const firstDayOfMonth = moment(currentDate)
         .startOf("month")
         .format("d");
@@ -39,8 +42,30 @@ export const Month = React.memo(({
         today = parseInt(moment(currentDate).format("D"));
     }
 
+    const prevMonthNum = moment(currentDate).month() - 1;
+    const prevMonth = moment(currentDate).month(prevMonthNum);
+    const prevMonthLength = Number(moment(currentDate).month(prevMonthNum).daysInMonth());
+    const firstDayOfPrevMonth = Number(moment(prevMonth)
+        .startOf("month")
+        .format("d"));
+
+    const toCompare = prevMonthLength + firstDayOfPrevMonth;
+    const getMarginTop = (value) => {
+            if (value > 35) {
+                console.log(': 1', value === firstDayOfPrevMonth + prevMonthLength);
+                return '-1000px';
+            }
+            // if ((value < 34) && (value > 29)) {
+            //     console.log(': ', value, firstDayOfPrevMonth + prevMonthLength);
+            //     return '-800px';
+            // }
+            // return '-800px';
+        }
+
     return (
-        <ul css={monthContainer(isOffsetExist)}>
+        <ul
+            css={monthContainer(isOffsetExist, getMarginTop(toCompare))}
+        >
             {
                 isOffsetExist
                 ? <OffsetDays firstDayOfMonth={firstDayOfMonth} />
@@ -57,4 +82,4 @@ export const Month = React.memo(({
             }
         </ul>
     );
-});
+}));

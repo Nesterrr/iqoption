@@ -37,14 +37,19 @@ type Props = {
     number: number,
     isEmpty: boolean,
     isToday: boolean,
+    getTodayRef: Function,
 };
 
 export const Day = React.memo(({
     number,
     isEmpty,
     isToday,
-}: Props): React.PureComponent => (
-    <li css={dayContainer(isEmpty)}>
+}: Props,
+    ref,
+): React.PureComponent => (
+    <li
+        css={dayContainer(isEmpty)}
+    >
         {
             number === 0
             ? ("")
