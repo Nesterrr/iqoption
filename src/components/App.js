@@ -1,49 +1,23 @@
+// @flow
 import React, { Component } from "react";
 import { css } from '@emotion/core';
 import moment from 'moment';
-import { List } from 'react-virtualized';
+import type Moment from 'moment';
 import { Month } from './Month.js';
 
-const events = [
-    {
-      name: 'Евгений Голубцов',
-      startDate: '15.05.2019',
-      endDate: '26.05.2019',
-    },
-    {
-      name: 'Валерия Борисова',
-      startDate: '03.06.2019',
-      endDate: '07.06.2019',
-    },
-    {
-      name: 'Валерия Борисова',
-      startDate: '27.05.2019',
-      endDate: '31.05.2019',
-    },
-    {
-      name: 'Андрей Копылов',
-      startDate: '27.05.2019',
-      endDate: '09.06.2019',
-    },
-    {
-      name: 'Святослав Подмагаев',
-      startDate: '22.04.2019',
-      endDate: '30.04.2019',
-    },
-    {
-      name: 'Кирилл Мельников',
-      startDate: '14.04.2019',
-      endDate: '30.04.2019',
-    }
-];
+
+type State = {
+    date: Moment,
+    offset: number,
+    weekDays: Array<string>,
+}
+
 
 const calendarContainer = (prop) => css`
     position: absolute;
-    // top: ${prop ? `200px` : `none`};
     margin-top: 0;
     margin-left: 0;
     padding: 0;
-    // height: 1000px;
     width: 1400px;
     outline: 1px solid red;
     list-style: none;
@@ -51,11 +25,7 @@ const calendarContainer = (prop) => css`
 
 const wrapper = css`
     position: relative;
-    // height: 1000px;
     width: 1400px;
-    // overflow: hidden;
-    // margin-top: 1000px;
-    // outline: 4px solid black;
 `;
 
 const weekDays = css`
@@ -66,12 +36,11 @@ const weekDays = css`
 
 const weekDaysContainer = css`
     display: flex;
-    // background-color: red;
     margin: 0;
     padding: 0;
 `;
 
-class App extends Component {
+class App extends Component<State, Props> {
     constructor(props) {
         super(props);
         this.state = {
@@ -80,14 +49,35 @@ class App extends Component {
             weekDays: moment.weekdaysShort(),
         }
 
-        this.onClick = this.onClick.bind(this);
+        this.handleChangeMonth = this.handleChangeMonth.bind(this);
     }
 
-    onClick (value) {
-        this.setState(prevState => ({
-            date: moment().locale('ru').add('M', prevState.offset + value),
-            offset: prevState.offset + value,
-        }));
+    handleChangeMonth (e: SyntheticEvent<HTMLButtonElement>) {
+        const { target } = e; 
+
+        const toNextToPrev = (value: number) => {
+            this.setState(prevState => ({
+                date: moment().locale('ru').add('M', prevState.offset + value),
+                offset: prevState.offset + value,
+            }));
+        }
+
+        switch (target.id) {
+            case 'prevBtn':
+                toNextToPrev(-1);
+                break;
+            case 'currentBtn':
+                this.setState({
+                    date: moment().locale('ru'),
+                    offset: 0,
+                });
+                break;
+            case 'nextBtn':
+                toNextToPrev(1);
+                break;
+            default:
+                toNextToPrev(1);
+        }
     }
 
     render() {
@@ -102,7 +92,7 @@ class App extends Component {
                 {
                     <Month
                         currentDate={this.state.date}
-                        events={events}
+                        events="events"
                     />
                 }
                 </ul>
@@ -110,12 +100,20 @@ class App extends Component {
         );
         return ([
             <button
-                onClick={() => this.onClick(-1)}
+                id="prevBtn"
+                onClick={this.handleChangeMonth}
             >
                 предыдущий месяц!
             </button>,
             <button
-                onClick={() => this.onClick(1)}
+                id="currentBtn"
+                onClick={this.handleChangeMonth}
+            >
+                сегодня
+            </button>,
+            <button
+                id="nextBtn"
+                onClick={this.handleChangeMonth}
             >
                 слудующий месяц!
             </button>,
