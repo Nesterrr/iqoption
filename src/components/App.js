@@ -75,59 +75,52 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            date: moment(),
+            date: moment().locale('ru'),
+            offset: 0,
+            weekDays: moment.weekdaysShort(),
         }
-        // this.state.date.locale('ru');
 
         this.onClick = this.onClick.bind(this);
     }
 
-    onClick () {
-        // console.log('onClick', this.state.date.month());
-        const newDate = Object.assign({}, this.state.date);
-        const newNumber = moment(this.state.date).month() + 1;
-        // console.log('newDate', newDate);
-        const date = moment(newDate).set("month", newNumber);
-        this.setState({
-            date,
-        });
+    onClick (value) {
+        this.setState(prevState => ({
+            date: moment().locale('ru').add('M', prevState.offset + value),
+            offset: prevState.offset + value,
+        }));
     }
 
     render() {
-        console.log('render: ', this.state.date.month());
-        // let newDate = Object.assign({}, this.state.date);
-        // const currentMonthNumber = moment(this.state.date).month();
-        // newDate = moment(newDate).set("month", currentMonthNumber);
-        // months.push(newDate);
-        const weekdayshort = moment.weekdaysShort();
-
         const renderer = () => ( 
             <div css={wrapper}>
                 <ul css={weekDaysContainer}>
                 {
-                    weekdayshort.map(weekDay => (<li css={weekDays}>{weekDay}</li>))
+                    this.state.weekDays.map(weekDay => (<li css={weekDays}>{weekDay}</li>))
                 }
                 </ul>
                 <ul css={calendarContainer(true)}>
                 {
-                    // months.map(month => (
                     <Month
                         currentDate={this.state.date}
                         events={events}
                     />
-                    // ))
                 }
                 </ul>
             </div>
         );
         return ([
             <button
-                onClick={() => this.onClick()}
+                onClick={() => this.onClick(-1)}
+            >
+                предыдущий месяц!
+            </button>,
+            <button
+                onClick={() => this.onClick(1)}
             >
                 слудующий месяц!
             </button>,
             <h2>
-                { moment(this.state.date).format("MMMM") }
+                { this.state.date.format("MMMM") }
             </h2>,
             renderer()
         ]);

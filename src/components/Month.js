@@ -25,10 +25,9 @@ const monthContainer = (isOffsetExist, prevMonthLength) => css`
     }
 `;
 
-export const Month = React.memo(React.forwardRef(({
+export const Month =({
     currentDate,
-}: Props,
-    ref,
+}: Props
 ) => {
     const currentYear = currentDate.year();
     const currentMonth = currentDate.month();
@@ -46,18 +45,11 @@ export const Month = React.memo(React.forwardRef(({
      
     }
 
-    // const prevMonthNum = currentMonth - 1;
-    // const prevMonth = currentDate.month(prevMonthNum);
-    // const firstDayOfPrevMonth = Number(
-    //     prevMonth
-    //         .startOf("month")
-    //         .format("d")
-    // );
-
     const getIsWeekend = (day) => {
         const currentDay = currentDate.weekday(day);
         return (currentDay === 6) || (currentDay === 5);
     }
+    console.log('currentDate: ', JSON.stringify(currentDate, null, 2));
     return (
         <ul
             css={monthContainer(isOffsetExist)}
@@ -83,4 +75,4 @@ export const Month = React.memo(React.forwardRef(({
             }
         </ul>
     );
-}));
+};
