@@ -83,44 +83,47 @@ class App extends React.Component<void, StateType> {
         return ([
             <button
                 id="prevBtn"
+                key="prevBtn"
                 onClick={this.handleChangeMonth}
             >
                 предыдущий месяц!
             </button>,
             <button
                 id="currentBtn"
+                key="currentBtn"
                 onClick={this.handleChangeMonth}
             >
                 сегодня
             </button>,
             <button
                 id="nextBtn"
+                key="nextBtn"
                 onClick={this.handleChangeMonth}
             >
                 слудующий месяц!
             </button>,
-            <h2>
+            <h2 key="header">
                 { this.state.date.format("MMMM") }
             </h2>,
-            <div css={wrapper}>
-            <ul css={weekDaysContainer}>
-            {
-                this.state.weekDays.map((weekDay: string): React.Element<'li'> => (
-                    <li css={weekDays}>
-                        {weekDay}
-                    </li>
-                ))
-            }
-            </ul>
-            <ul css={calendarContainer}>
-            {
-                <Month
-                    currentDate={this.state.date}
-                    events="events"
-                />
-            }
-            </ul>
-        </div>
+            <div css={wrapper} key="wrapper">
+                <ul css={weekDaysContainer}>
+                {
+                    this.state.weekDays.map((weekDay: string): React.Element<'li'> => (
+                        <li css={weekDays} key={weekDay}>
+                            {weekDay}
+                        </li>
+                    ))
+                }
+                </ul>
+                <div css={calendarContainer}>
+                {
+                    <Month
+                        currentDate={this.state.date}
+                        events="events"
+                    />
+                }
+                </div>
+            </div>
         ]);
     }
 }

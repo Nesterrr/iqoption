@@ -21,7 +21,7 @@ const monthContainer = (isOffsetExist: boolean): SerializedStyles => css`
     padding: 0;
     margin-top: ${isOffsetExist ? `-200px` : `0`};
 
-    &:first-child {
+    &:first-of-type {
         margin-top: 0;
     }
 `;
