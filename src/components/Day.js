@@ -4,6 +4,7 @@ import { css } from '@emotion/core';
 
 const dayContainer = (
     isEmpty: boolean,
+    isWeekend: boolean,
 ) => css`
     box-sizing: border-box;
     width: 200px;
@@ -11,6 +12,7 @@ const dayContainer = (
     list-style: none;
     border: 1px solid green;
     border-collapse: collapse;
+    background-color: ${isWeekend ? `grey` : ``};
     visibility: ${isEmpty ? `hidden` : `visible`};
 `;
 
@@ -38,17 +40,19 @@ type Props = {
     isEmpty: boolean,
     isToday: boolean,
     getTodayRef: Function,
+    isWeekend: boolean,
 };
 
 export const Day = React.memo(({
     number,
     isEmpty,
     isToday,
+    isWeekend,
 }: Props,
     ref,
 ): React.PureComponent => (
     <li
-        css={dayContainer(isEmpty)}
+        css={dayContainer(isEmpty, isWeekend)}
     >
         {
             number === 0

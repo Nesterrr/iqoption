@@ -22,7 +22,6 @@ const monthContainer = (isOffsetExist, prevMonthLength) => css`
 
     &:first-child {
         margin-top: 0;
-        // margin-top: ${prevMonthLength};
     }
 `;
 
@@ -31,40 +30,37 @@ export const Month = React.memo(React.forwardRef(({
 }: Props,
     ref,
 ) => {
-    const firstDayOfMonth = moment(currentDate)
+    const currentYear = currentDate.year();
+    const currentMonth = currentDate.month();
+    const firstDayOfMonth = currentDate
         .startOf("month")
         .format("d");
-    const daysInMonth = range(1, moment(currentDate).daysInMonth());
+    const daysInMonth = range(1, currentDate.daysInMonth());
     const isOffsetExist = firstDayOfMonth > 1;
 
-    let today = null;
-    if (moment(currentDate).month() === moment().month()) {
-        today = parseInt(moment(currentDate).format("D"));
+    const today = Number(moment().format("D"));
+    const getIsToday = (day) => {
+        return (currentYear === moment().year()) 
+            && (currentMonth === moment().month())
+            && (day === today)
+     
     }
 
-    const prevMonthNum = moment(currentDate).month() - 1;
-    const prevMonth = moment(currentDate).month(prevMonthNum);
-    const prevMonthLength = Number(moment(currentDate).month(prevMonthNum).daysInMonth());
-    const firstDayOfPrevMonth = Number(moment(prevMonth)
-        .startOf("month")
-        .format("d"));
+    // const prevMonthNum = currentMonth - 1;
+    // const prevMonth = currentDate.month(prevMonthNum);
+    // const firstDayOfPrevMonth = Number(
+    //     prevMonth
+    //         .startOf("month")
+    //         .format("d")
+    // );
 
-    const toCompare = prevMonthLength + firstDayOfPrevMonth;
-    const getMarginTop = (value) => {
-            if (value > 35) {
-                console.log(': 1', value === firstDayOfPrevMonth + prevMonthLength);
-                return '-1000px';
-            }
-            // if ((value < 34) && (value > 29)) {
-            //     console.log(': ', value, firstDayOfPrevMonth + prevMonthLength);
-            //     return '-800px';
-            // }
-            // return '-800px';
-        }
-
+    const getIsWeekend = (day) => {
+        const currentDay = currentDate.weekday(day);
+        return (currentDay === 6) || (currentDay === 5);
+    }
     return (
         <ul
-            css={monthContainer(isOffsetExist, getMarginTop(toCompare))}
+            css={monthContainer(isOffsetExist)}
         >
             {
                 isOffsetExist
@@ -72,13 +68,18 @@ export const Month = React.memo(React.forwardRef(({
                 : null
             }
             {
-                daysInMonth.map((day) => (
-                    <Day
-                        number={day}
-                        key={day}
-                        isToday={today === day}
-                    />
-                ))
+                daysInMonth.map((day) => {
+                    const isWeekend = getIsWeekend(day);
+                    const isToday = getIsToday(day);
+                    return (
+                        <Day
+                            number={day}
+                            key={day}
+                            isToday={isToday}
+                            isWeekend={isWeekend}
+                        />
+                    )
+                })
             }
         </ul>
     );
