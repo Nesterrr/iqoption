@@ -1,20 +1,20 @@
 // @flow
-import React from 'react';
-import { Day } from './Day';
+import * as React from 'react';
+import Day from './Day';
 import { range } from '../utils/range';
 
-type Props = {
-    firstDayOfMonth: string | number,
+type PropsType = {
+    firstDayOfMonth: string | number
 };
 
 const OffsetDays = ({
     firstDayOfMonth,
-}: Props) => {
+}: PropsType): React.Element<*> => {
     const emptyBlocks = range(1, parseInt(firstDayOfMonth) - 1);
     return (
         <React.Fragment>
             {
-                emptyBlocks.map((offsetDay) => {
+                emptyBlocks.map((offsetDay: number): React.Element<typeof Day> => {
                     const key = `${offsetDay}-offset`;
                     return (
                         <Day

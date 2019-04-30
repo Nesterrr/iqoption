@@ -1,17 +1,18 @@
-// @ flow
-import React from "react";
+// @flow
+import * as React from "react";
 import { css } from '@emotion/core';
+import type { SerializedStyles } from '@emotion/utils';
 import moment from 'moment';
 import type Moment from 'moment';
 import { range } from '../utils/range';
-import { Day } from './Day';
+import Day from './Day';
 import OffsetDays from './OffsetDays';
 
-type Props = {
-    monthNumber: Moment,
+type PropsType = {
+    currentDate: Moment
 };
 
-const monthContainer = (isOffsetExist, prevMonthLength) => css`
+const monthContainer = (isOffsetExist: boolean): SerializedStyles => css`
     position: relative;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -27,8 +28,8 @@ const monthContainer = (isOffsetExist, prevMonthLength) => css`
 
 export const Month =({
     currentDate,
-}: Props
-) => {
+}: PropsType
+): React.Element<*> => {
     const currentYear = currentDate.year();
     const currentMonth = currentDate.month();
     const firstDayOfMonth = currentDate
@@ -38,18 +39,17 @@ export const Month =({
     const isOffsetExist = firstDayOfMonth > 1;
 
     const today = Number(moment().format("D"));
-    const getIsToday = (day) => {
+    const getIsToday = (day: number): boolean => {
         return (currentYear === moment().year()) 
             && (currentMonth === moment().month())
             && (day === today)
      
     }
 
-    const getIsWeekend = (day) => {
+    const getIsWeekend = (day: number): boolean => {
         const currentDay = currentDate.weekday(day);
         return (currentDay === 6) || (currentDay === 5);
     }
-    console.log('currentDate: ', JSON.stringify(currentDate, null, 2));
     return (
         <ul
             css={monthContainer(isOffsetExist)}
@@ -60,7 +60,7 @@ export const Month =({
                 : null
             }
             {
-                daysInMonth.map((day) => {
+                daysInMonth.map((day: number): React.Element<typeof Day> => {
                     const isWeekend = getIsWeekend(day);
                     const isToday = getIsToday(day);
                     return (

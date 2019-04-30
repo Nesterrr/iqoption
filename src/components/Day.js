@@ -1,11 +1,12 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { css } from '@emotion/core';
+import type { SerializedStyles } from '@emotion/utils';
 
 const dayContainer = (
     isEmpty: boolean,
     isWeekend: boolean,
-) => css`
+): SerializedStyles => css`
     box-sizing: border-box;
     width: 200px;
     height: 200px;
@@ -24,7 +25,7 @@ const today = css`
     height: 30px;
 `;
 
-const dayNumber = (isToday) => css`
+const dayNumber = (isToday: boolean): SerializedStyles => css`
     border: 1px solid transparent;
     ${isToday ? `
         display: block;
@@ -35,22 +36,19 @@ const dayNumber = (isToday) => css`
     ` : ``}
 `;
 
-type Props = {
+export type PropsType = {
     number: number,
     isEmpty: boolean,
     isToday: boolean,
-    getTodayRef: Function,
-    isWeekend: boolean,
+    isWeekend: boolean
 };
 
-export const Day = React.memo(({
+const Day = ({
     number,
     isEmpty,
     isToday,
     isWeekend,
-}: Props,
-    ref,
-): React.PureComponent => (
+}: PropsType): React.Element<'li'> => (
     <li
         css={dayContainer(isEmpty, isWeekend)}
     >
@@ -64,4 +62,12 @@ export const Day = React.memo(({
             )
         }
     </li>
-));
+);
+
+Day.defaultProps = {
+    isEmpty: false,
+    isToday: false,
+    isWeekend: false,
+};
+
+export default Day;

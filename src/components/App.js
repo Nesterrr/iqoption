@@ -1,19 +1,18 @@
 // @flow
-import React, { Component } from "react";
+import * as React from "react";
 import { css } from '@emotion/core';
 import moment from 'moment';
 import type Moment from 'moment';
 import { Month } from './Month.js';
 
 
-type State = {
+type StateType = {
     date: Moment,
     offset: number,
-    weekDays: Array<string>,
-}
+    weekDays: Array<string>
+};
 
-
-const calendarContainer = (prop) => css`
+const calendarContainer = css`
     position: absolute;
     margin-top: 0;
     margin-left: 0;
@@ -40,29 +39,29 @@ const weekDaysContainer = css`
     padding: 0;
 `;
 
-class App extends Component<State, Props> {
-    constructor(props) {
+class App extends React.Component<void, StateType> {
+    constructor(props: void) {
         super(props);
         this.state = {
             date: moment().locale('ru'),
             offset: 0,
             weekDays: moment.weekdaysShort(),
         }
-
-        this.handleChangeMonth = this.handleChangeMonth.bind(this);
     }
 
-    handleChangeMonth (e: SyntheticEvent<HTMLButtonElement>) {
-        const { target } = e; 
+    handleChangeMonth = ({ target }: SyntheticInputEvent<EventTarget>) => {
+        const { id } = target;
 
         const toNextToPrev = (value: number) => {
-            this.setState(prevState => ({
+            this.setState((
+                prevState: StateType
+            ): { date: Moment, offset: number } => ({
                 date: moment().locale('ru').add('M', prevState.offset + value),
                 offset: prevState.offset + value,
             }));
         }
 
-        switch (target.id) {
+        switch (id) {
             case 'prevBtn':
                 toNextToPrev(-1);
                 break;
@@ -80,24 +79,7 @@ class App extends Component<State, Props> {
         }
     }
 
-    render() {
-        const renderer = () => ( 
-            <div css={wrapper}>
-                <ul css={weekDaysContainer}>
-                {
-                    this.state.weekDays.map(weekDay => (<li css={weekDays}>{weekDay}</li>))
-                }
-                </ul>
-                <ul css={calendarContainer(true)}>
-                {
-                    <Month
-                        currentDate={this.state.date}
-                        events="events"
-                    />
-                }
-                </ul>
-            </div>
-        );
+    render(): Array<React.Element<*>> {
         return ([
             <button
                 id="prevBtn"
@@ -120,7 +102,25 @@ class App extends Component<State, Props> {
             <h2>
                 { this.state.date.format("MMMM") }
             </h2>,
-            renderer()
+            <div css={wrapper}>
+            <ul css={weekDaysContainer}>
+            {
+                this.state.weekDays.map((weekDay: string): React.Element<'li'> => (
+                    <li css={weekDays}>
+                        {weekDay}
+                    </li>
+                ))
+            }
+            </ul>
+            <ul css={calendarContainer}>
+            {
+                <Month
+                    currentDate={this.state.date}
+                    events="events"
+                />
+            }
+            </ul>
+        </div>
         ]);
     }
 }
