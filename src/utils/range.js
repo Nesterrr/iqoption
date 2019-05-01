@@ -2,8 +2,11 @@
 
 export function range (
     start: number,
-    end: number,
+    end: number
 ): Array<number> {
-    if (start === end) return [start];
-    return [start, ...range(start + 1, end)];
+    var ans = [];
+    for (let i = start; i <= end; i++) {
+        ans.push(i);
+    }
+    return ans;
 }

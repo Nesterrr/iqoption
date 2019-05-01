@@ -10,10 +10,6 @@ export const style = {
         gap: 0;
         width: 600px;
         padding: 0;
-        margin-top: ${isOffsetExist ? `-200px` : `0`};
-
-        &:first-of-type {
-            margin-top: 0;
-        }
+        margin: 0;
     `
 };

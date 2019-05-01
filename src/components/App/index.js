@@ -3,8 +3,9 @@ import * as React from "react";
 import { css } from '@emotion/core';
 import moment from 'moment';
 import type Moment from 'moment';
-import { Month } from '../Month';
+import { Page } from '../Page';
 import { momentCreator } from '../../utils/momentCreator';
+import { range } from '../../utils/range';
 import { style } from './style.js';
 
 type StateType = {
@@ -33,7 +34,7 @@ class App extends React.Component<void, StateType> {
             this.setState((
                 prevState: StateType
             ): { date: Moment, offset: number } => ({
-                date: momentCreator().add('M', prevState.offset + value),
+                date: momentCreator().add(prevState.offset + value, 'M'),
                 offset: prevState.offset + value,
             }));
         }
@@ -63,6 +64,80 @@ class App extends React.Component<void, StateType> {
 
         const currentYear = date.year();
         const currentMonthNumber = date.month();
+
+        const createPage = (): Array<{
+            dateString: string,
+            number: number
+        }> => {
+            const PAGE_LENGTH = 42;
+            const pageDays = [];
+            const firstDayOfCurrentMonth = Number(date
+                .startOf("month")
+                .format("d"));
+            const lengthOfCurrentMonth = date.daysInMonth();
+            const lengthOfPrevMonth = (Number(firstDayOfCurrentMonth) - 2);
+
+            const createPagePart = (
+                length: number,
+                pageNumbresPart: Array<number>,
+                monthNumber: number,
+                yearNumber: number
+            ): Array<{
+                number: number,
+                dateString: string
+            }> => {
+                return pageNumbresPart.map((day: number): {
+                    number: number,
+                    dateString: string
+                } => {
+                    const dateString = momentCreator().
+                        date(day).
+                        month(monthNumber).
+                        year(yearNumber).
+                        format('YYYY-MM-DD');
+                    return ({
+                        number: day,
+                        dateString
+                    });
+                });
+            }
+
+            const lastDayOfPrevMonth = Number(momentCreator().
+                add(this.state.offset - 1, 'M').
+                daysInMonth());
+
+            const prevMonthNumbers = range(lastDayOfPrevMonth - lengthOfPrevMonth, lastDayOfPrevMonth);
+            const currentMonthNumbers = range(1, lengthOfCurrentMonth);
+            
+            const prevMonth = createPagePart(
+                lengthOfPrevMonth,
+                prevMonthNumbers,
+                momentCreator().add(this.state.offset - 1, 'M').month(),
+                momentCreator().add(this.state.offset - 1, 'M').year()
+            );
+                
+            const currentMonth = createPagePart(
+                lengthOfCurrentMonth,
+                currentMonthNumbers,
+                momentCreator().add(this.state.offset, 'M').month(),
+                momentCreator().add(this.state.offset, 'M').year()
+            );
+            
+            const lengthOfNextMonth = PAGE_LENGTH - prevMonth.length - currentMonth.length;
+            const nextMonthNumbers = range(1, lengthOfNextMonth);
+            const nextMonth = createPagePart(
+                lengthOfNextMonth,
+                nextMonthNumbers,
+                momentCreator().add(this.state.offset + 1, 'M').month(),
+                momentCreator().add(this.state.offset + 1, 'M').year()
+            );
+            return [
+                ...prevMonth,
+                ...currentMonth,
+                ...nextMonth
+            ];
+        }
+        const currentPage = createPage();
         return ([
             <button
                 key="prevBtn"
@@ -109,15 +184,12 @@ class App extends React.Component<void, StateType> {
                 }
                 </ul>
                 <div css={style.calendarContainer}>
-                {
-                    <Month
-                        currentDate={date}
-                        events="events"
+                    <Page
+                        days={currentPage}
                         currentYear={currentYear}
                         currentMonthNumber={currentMonthNumber}
                         currentMonth={date.format("MMMM")}
                     />
-                }
                 </div>
             </div>
         ]);
