@@ -60,6 +60,9 @@ class App extends React.Component<void, StateType> {
         const {
             date,
         } = this.state;
+
+        const currentYear = date.year();
+        const currentMonthNumber = date.month();
         return ([
             <button
                 key="prevBtn"
@@ -84,6 +87,8 @@ class App extends React.Component<void, StateType> {
             </button>,
             <h2 key="header">
                 { date.format("MMMM") }
+                {" "}
+                { currentYear }
             </h2>,
             <div
                 key="wrapper"
@@ -108,6 +113,9 @@ class App extends React.Component<void, StateType> {
                     <Month
                         currentDate={date}
                         events="events"
+                        currentYear={currentYear}
+                        currentMonthNumber={currentMonthNumber}
+                        currentMonth={date.format("MMMM")}
                     />
                 }
                 </div>

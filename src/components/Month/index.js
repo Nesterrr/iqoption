@@ -7,49 +7,47 @@ import type Moment from 'moment';
 import { range } from '../../utils/range';
 import { Day } from '../Day';
 import { OffsetDays } from '../OffsetDays/';
+import { style } from './style';
 
 type PropsType = {
-    currentDate: Moment
+    currentDate: Moment,
+    currentYear: number,
+    currentMonth: string,
+    currentMonthNumber: number
 };
 
-const monthContainer = (isOffsetExist: boolean): SerializedStyles => css`
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 0;
-    width: 600px;
-    padding: 0;
-    margin-top: ${isOffsetExist ? `-200px` : `0`};
+const SATURDAY = 5;
+const SUNDAY = 6;
+const FIRST_DAY_OF_MONTH = 1;
 
-    &:first-of-type {
-        margin-top: 0;
-    }
-`;
-
-export const Month =({ currentDate }: PropsType): React.Element<*> => {
-    const currentYear = currentDate.year();
-    const currentMonth = currentDate.month();
+export const Month =({
+    currentDate,
+    currentYear,
+    currentMonth,
+    currentMonthNumber,
+}: PropsType): React.Element<*> => {
     const firstDayOfMonth = currentDate
         .startOf("month")
         .format("d");
     const daysInMonth = range(1, currentDate.daysInMonth());
-    const isOffsetExist = firstDayOfMonth > 1;
+    const isOffsetExist = firstDayOfMonth > FIRST_DAY_OF_MONTH;
 
     const today = Number(moment().format("D"));
     const getIsToday = (day: number): boolean => {
         return (currentYear === moment().year()) 
-            && (currentMonth === moment().month())
+            && (currentMonthNumber === moment().month())
             && (day === today)
      
     }
 
     const getIsWeekend = (day: number): boolean => {
-        const currentDay = currentDate.weekday(day);
-        return (currentDay === 6) || (currentDay === 5);
+        const currentDay = currentDate.day(day).format();
+        console.log('currentDay', currentDay, day);
+        return (currentDay === SATURDAY) || (currentDay === SUNDAY);
     }
     return (
         <ul
-            css={monthContainer(isOffsetExist)}
+            css={style.monthContainer(isOffsetExist)}
         >
             {
                 isOffsetExist
@@ -63,6 +61,7 @@ export const Month =({ currentDate }: PropsType): React.Element<*> => {
                     return (
                         <Day
                             number={day}
+                            monthName={(day === 1) ? currentMonth : null}
                             key={day}
                             isToday={isToday}
                             isWeekend={isWeekend}

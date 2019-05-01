@@ -7,7 +7,8 @@ type PropsType = {
     number: number,
     isEmpty: boolean,
     isToday: boolean,
-    isWeekend: boolean
+    isWeekend: boolean,
+    monthName?: string | null
 };
 
 export const Day = ({
@@ -15,6 +16,7 @@ export const Day = ({
     isEmpty,
     isToday,
     isWeekend,
+    monthName
 }: PropsType): React.Element<'li'> => (
     <li
         css={style.dayContainer(isEmpty, isWeekend)}
@@ -25,9 +27,13 @@ export const Day = ({
             : (
                 <span css={style.dayNumber(isToday)}>
                     { number }
+                    {" "}
                 </span>
             )
         }
+        <span>
+            { monthName }
+        </span>
     </li>
 );
 
@@ -35,4 +41,5 @@ Day.defaultProps = {
     isEmpty: false,
     isToday: false,
     isWeekend: false,
+    monthName: '',
 };
