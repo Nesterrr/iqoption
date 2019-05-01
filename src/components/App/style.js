@@ -18,7 +18,6 @@ export const style = {
         padding: 0;
         width: 100%;
         height: 94%;
-        outline: 2px solid rgba(0, 0, 0, 0.1);
         list-style: none;
     `,
     weekDays: css`
