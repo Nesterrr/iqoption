@@ -33,6 +33,7 @@ export const style = {
         width: 100%;
         margin: 0;
         padding: 0;
+        text-transform: uppercase;
     `,
     controls: css`
         display: flex;
