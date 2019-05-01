@@ -72,9 +72,12 @@ class App extends React.Component<void, StateType> {
         }> => {
             const PAGE_LENGTH = 42;
             const pageDays = [];
-            const firstDayOfCurrentMonth = Number(date
+            let firstDayOfCurrentMonth = Number(date
                 .startOf("month")
                 .format("d"));
+            if (firstDayOfCurrentMonth === 0) {
+                firstDayOfCurrentMonth = 7;
+            }
             const lengthOfCurrentMonth = date.daysInMonth();
             const lengthOfPrevMonth = (Number(firstDayOfCurrentMonth) - 2);
 

@@ -24,12 +24,11 @@ export const Page = ({
                 }: {
                     dateString: string,
                     number: number
-                }): React.Element<typeof Day> => {
+                }, index: number): React.Element<typeof Day> => {
                     const isToday = moment(dateString).isSame(moment().format("YYYY-MM-DD"));
-                    
                     return (
                         <Day
-                            key={dateString}
+                            key={`${dateString}-${number}-${index}`}
                             number={number}
                             dateString={dateString}
                             isToday={isToday}
