@@ -4,9 +4,9 @@ import { css } from '@emotion/core';
 import type { SerializedStyles } from '@emotion/utils';
 import moment from 'moment';
 import type Moment from 'moment';
-import { range } from '../utils/range';
-import Day from './Day';
-import OffsetDays from './OffsetDays';
+import { range } from '../../utils/range';
+import { Day } from '../Day';
+import { OffsetDays } from '../OffsetDays/';
 
 type PropsType = {
     currentDate: Moment
@@ -26,10 +26,7 @@ const monthContainer = (isOffsetExist: boolean): SerializedStyles => css`
     }
 `;
 
-export const Month =({
-    currentDate,
-}: PropsType
-): React.Element<*> => {
+export const Month =({ currentDate }: PropsType): React.Element<*> => {
     const currentYear = currentDate.year();
     const currentMonth = currentDate.month();
     const firstDayOfMonth = currentDate

@@ -3,49 +3,26 @@ import * as React from "react";
 import { css } from '@emotion/core';
 import moment from 'moment';
 import type Moment from 'moment';
-import { Month } from './Month.js';
-
+import { Month } from '../Month';
+import { momentCreator } from '../../utils/momentCreator';
+import { style } from './style.js';
 
 type StateType = {
     date: Moment,
-    offset: number,
-    weekDays: Array<string>
+    offset: number
 };
 
-const calendarContainer = css`
-    position: absolute;
-    margin-top: 0;
-    margin-left: 0;
-    padding: 0;
-    width: 1400px;
-    outline: 1px solid red;
-    list-style: none;
-`;
-
-const wrapper = css`
-    position: relative;
-    width: 1400px;
-`;
-
-const weekDays = css`
-    width: 100%;
-    text-align: right;
-    list-style: none;
-`;
-
-const weekDaysContainer = css`
-    display: flex;
-    margin: 0;
-    padding: 0;
-`;
+const WEEK_DAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+const INITIAL_OFFSET = 0;
+const INCREMENT_VALUE = 1;
+const DECREMENT_VALUE = -1;
 
 class App extends React.Component<void, StateType> {
-    constructor(props: void) {
-        super(props);
+    constructor() {
+        super();
         this.state = {
-            date: moment().locale('ru'),
-            offset: 0,
-            weekDays: moment.weekdaysShort(),
+            date: momentCreator(),
+            offset: INITIAL_OFFSET,
         }
     }
 
@@ -56,41 +33,44 @@ class App extends React.Component<void, StateType> {
             this.setState((
                 prevState: StateType
             ): { date: Moment, offset: number } => ({
-                date: moment().locale('ru').add('M', prevState.offset + value),
+                date: momentCreator().add('M', prevState.offset + value),
                 offset: prevState.offset + value,
             }));
         }
 
         switch (id) {
             case 'prevBtn':
-                toNextToPrev(-1);
+                toNextToPrev(DECREMENT_VALUE);
                 break;
             case 'currentBtn':
                 this.setState({
-                    date: moment().locale('ru'),
-                    offset: 0,
+                    date: momentCreator().locale('ru'),
+                    offset: INITIAL_OFFSET,
                 });
                 break;
             case 'nextBtn':
-                toNextToPrev(1);
+                toNextToPrev(INCREMENT_VALUE);
                 break;
             default:
-                toNextToPrev(1);
+                toNextToPrev(INCREMENT_VALUE);
         }
     }
 
     render(): Array<React.Element<*>> {
+        const {
+            date,
+        } = this.state;
         return ([
             <button
-                id="prevBtn"
                 key="prevBtn"
+                id="prevBtn"
                 onClick={this.handleChangeMonth}
             >
                 предыдущий месяц!
             </button>,
             <button
-                id="currentBtn"
                 key="currentBtn"
+                id="currentBtn"
                 onClick={this.handleChangeMonth}
             >
                 сегодня
@@ -103,22 +83,30 @@ class App extends React.Component<void, StateType> {
                 слудующий месяц!
             </button>,
             <h2 key="header">
-                { this.state.date.format("MMMM") }
+                { date.format("MMMM") }
             </h2>,
-            <div css={wrapper} key="wrapper">
-                <ul css={weekDaysContainer}>
+            <div
+                key="wrapper"
+                css={style.wrapper}
+            >
+                <ul css={style.weekDaysContainer}>
                 {
-                    this.state.weekDays.map((weekDay: string): React.Element<'li'> => (
-                        <li css={weekDays} key={weekDay}>
+                    WEEK_DAYS.map((
+                        weekDay: string
+                    ): React.Element<'li'> => (
+                        <li
+                            key={weekDay}
+                            css={style.weekDays}
+                        >
                             {weekDay}
                         </li>
                     ))
                 }
                 </ul>
-                <div css={calendarContainer}>
+                <div css={style.calendarContainer}>
                 {
                     <Month
-                        currentDate={this.state.date}
+                        currentDate={date}
                         events="events"
                     />
                 }
