@@ -23,6 +23,7 @@ export const style = {
     `,
     weekDays: css`
         width: 100%;
+        padding-right: 8px;
         text-align: right;
         list-style: none;
     `,
