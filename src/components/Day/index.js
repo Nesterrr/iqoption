@@ -38,7 +38,7 @@ export const Day = ({
     })
     return (
         <li
-            css={style.dayContainer(isEmpty, isWeekend)}
+            css={style.dayContainer}
         >
             {
                 number === 0

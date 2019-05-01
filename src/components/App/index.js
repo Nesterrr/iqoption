@@ -57,9 +57,10 @@ class App extends React.Component<void, StateType> {
         }
     }
 
-    render(): Array<React.Element<*>> {
+    render(): React.Element<*> {
         const {
             date,
+            offset,
         } = this.state;
 
         const currentYear = date.year();
@@ -103,7 +104,7 @@ class App extends React.Component<void, StateType> {
             }
 
             const lastDayOfPrevMonth = Number(momentCreator().
-                add(this.state.offset - 1, 'M').
+                add(offset - 1, 'M').
                 daysInMonth());
 
             const prevMonthNumbers = range(lastDayOfPrevMonth - lengthOfPrevMonth, lastDayOfPrevMonth);
@@ -112,15 +113,15 @@ class App extends React.Component<void, StateType> {
             const prevMonth = createPagePart(
                 lengthOfPrevMonth,
                 prevMonthNumbers,
-                momentCreator().add(this.state.offset - 1, 'M').month(),
-                momentCreator().add(this.state.offset - 1, 'M').year()
+                momentCreator().add(offset - 1, 'M').month(),
+                momentCreator().add(offset - 1, 'M').year()
             );
                 
             const currentMonth = createPagePart(
                 lengthOfCurrentMonth,
                 currentMonthNumbers,
-                momentCreator().add(this.state.offset, 'M').month(),
-                momentCreator().add(this.state.offset, 'M').year()
+                momentCreator().add(offset, 'M').month(),
+                momentCreator().add(offset, 'M').year()
             );
             
             const lengthOfNextMonth = PAGE_LENGTH - prevMonth.length - currentMonth.length;
@@ -128,8 +129,8 @@ class App extends React.Component<void, StateType> {
             const nextMonth = createPagePart(
                 lengthOfNextMonth,
                 nextMonthNumbers,
-                momentCreator().add(this.state.offset + 1, 'M').month(),
-                momentCreator().add(this.state.offset + 1, 'M').year()
+                momentCreator().add(offset + 1, 'M').month(),
+                momentCreator().add(offset + 1, 'M').year()
             );
             return [
                 ...prevMonth,
@@ -138,52 +139,52 @@ class App extends React.Component<void, StateType> {
             ];
         }
         const currentPage = createPage();
-        return ([
-            <button
-                key="prevBtn"
-                id="prevBtn"
-                onClick={this.handleChangeMonth}
-            >
-                предыдущий месяц!
-            </button>,
-            <button
-                key="currentBtn"
-                id="currentBtn"
-                onClick={this.handleChangeMonth}
-            >
-                сегодня
-            </button>,
-            <button
-                id="nextBtn"
-                key="nextBtn"
-                onClick={this.handleChangeMonth}
-            >
-                слудующий месяц!
-            </button>,
-            <h2 key="header">
-                { date.format("MMMM") }
-                {" "}
-                { currentYear }
-            </h2>,
-            <div
-                key="wrapper"
-                css={style.wrapper}
-            >
-                <ul css={style.weekDaysContainer}>
-                {
-                    WEEK_DAYS.map((
-                        weekDay: string
-                    ): React.Element<'li'> => (
-                        <li
-                            key={weekDay}
-                            css={style.weekDays}
-                        >
-                            {weekDay}
-                        </li>
-                    ))
-                }
-                </ul>
+        return (
+            <div css={style.rootContainer}>
+                <div css={style.controls}>
+                    <button
+                        key="prevBtn"
+                        id="prevBtn"
+                        onClick={this.handleChangeMonth}
+                        css={style.prevBtn}
+                    >
+                    </button>
+                    <button
+                        key="currentBtn"
+                        id="currentBtn"
+                        onClick={this.handleChangeMonth}
+                    >
+                        сегодня
+                    </button>
+                    <button
+                        id="nextBtn"
+                        key="nextBtn"
+                        onClick={this.handleChangeMonth}
+                        css={style.nextBtn}
+                    >
+                    </button>
+                </div>
+                <h2 key="header" css={style.monthYear}>
+                    { date.format("MMMM") }
+                    {" "}
+                    { currentYear }
+                    {" "}г.
+                </h2>
                 <div css={style.calendarContainer}>
+                    <ul css={style.weekDaysContainer}>
+                    {
+                        WEEK_DAYS.map((
+                            weekDay: string
+                        ): React.Element<'li'> => (
+                            <li
+                                key={weekDay}
+                                css={style.weekDays}
+                            >
+                                {weekDay}
+                            </li>
+                        ))
+                    }
+                    </ul>
                     <Page
                         days={currentPage}
                         currentYear={currentYear}
@@ -192,7 +193,7 @@ class App extends React.Component<void, StateType> {
                     />
                 </div>
             </div>
-        ]);
+        );
     }
 }
 
