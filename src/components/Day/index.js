@@ -10,7 +10,6 @@ type PropsType = {
     number: number,
     isEmpty: boolean,
     isToday: boolean,
-    isWeekend: boolean,
     monthName?: string | null,
     dateString: string,
     partName: string
@@ -20,7 +19,6 @@ export const Day = ({
     number,
     isEmpty,
     isToday,
-    isWeekend,
     monthName,
     dateString,
     lengthOfNextMonth,
@@ -39,9 +37,16 @@ export const Day = ({
         return moment(dateString).isSameOrAfter(formatedStartDate)
             && moment(dateString).isSameOrBefore(formatedEndDate);
     })
+
+    const currenWeekDay = moment(dateString).day();
+    const SATURDAY = 6;
+    const SUNDAY = 0;
+    const FIRST_DAY_OF_WEEK = 1;
+    const isWeekend = currenWeekDay === SATURDAY || currenWeekDay === SUNDAY;
+
     return (
         <li
-            css={style.dayContainer(partName)}
+            css={style.dayContainer(partName, isWeekend)}
         >
             {
                 number === 0
@@ -67,7 +72,7 @@ export const Day = ({
                                 <div>
                                     {
                                         moment(dateString).isSame(formatedStartDate)
-                                        || moment(dateString).day() === 1
+                                        || currenWeekDay === FIRST_DAY_OF_WEEK
                                         ? name : ''
                                     }
                                 </div>
@@ -83,6 +88,5 @@ export const Day = ({
 Day.defaultProps = {
     isEmpty: false,
     isToday: false,
-    isWeekend: false,
     monthName: '',
 };

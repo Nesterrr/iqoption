@@ -3,7 +3,7 @@ import { css } from '@emotion/core';
 import type { SerializedStyles } from '@emotion/utils';
 
 export const style = {
-    dayContainer: (partName: string): SerializedStyles => css`
+    dayContainer: (partName: string, isWeekend: boolean): SerializedStyles => css`
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
@@ -13,7 +13,9 @@ export const style = {
         list-style: none;
         border: 1px solid rgba(0, 0, 0, 0.1);
         border-collapse: collapse;
-        color: ${partName === 'next' ? `rgba(0, 0, 0, 0.5);` : ``};
+        color: ${partName === 'next' ? `rgba(0, 0, 0, 0.5)` : ``};
+        background-color: ${isWeekend ? `rgba(0, 0, 0, 0.1)` : ``};
+        
 
         & ul {
             padding: 0;
