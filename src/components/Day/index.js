@@ -66,7 +66,9 @@ export const Day = ({
                             <li key={index}>
                                 <div>
                                     {
-                                        moment(dateString).isSame(formatedStartDate) ? name : ''
+                                        moment(dateString).isSame(formatedStartDate)
+                                        || moment(dateString).day() === 1
+                                        ? name : ''
                                     }
                                 </div>
                             </li>
