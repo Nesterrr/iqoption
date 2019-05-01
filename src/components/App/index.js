@@ -66,10 +66,14 @@ class App extends React.Component<void, StateType> {
         const currentYear = date.year();
         const currentMonthNumber = date.month();
 
-        const createPage = (): Array<{
-            dateString: string,
-            number: number
-        }> => {
+        const createPage = (): {
+            page: Array<{
+                dateString: string,
+                number: number,
+                partName: string
+            }>,
+            lengthOfNextMonth: number
+        } => {
             const PAGE_LENGTH = 42;
             const pageDays = [];
             let firstDayOfCurrentMonth = Number(date
@@ -85,14 +89,17 @@ class App extends React.Component<void, StateType> {
                 length: number,
                 pageNumbresPart: Array<number>,
                 monthNumber: number,
-                yearNumber: number
+                yearNumber: number,
+                partName: string
             ): Array<{
                 number: number,
-                dateString: string
+                dateString: string,
+                partName: string
             }> => {
                 return pageNumbresPart.map((day: number): {
                     number: number,
-                    dateString: string
+                    dateString: string,
+                    partName: string
                 } => {
                     const dateString = momentCreator().
                         date(day).
@@ -101,7 +108,8 @@ class App extends React.Component<void, StateType> {
                         format('YYYY-MM-DD');
                     return ({
                         number: day,
-                        dateString
+                        dateString,
+                        partName
                     });
                 });
             }
@@ -117,14 +125,16 @@ class App extends React.Component<void, StateType> {
                 lengthOfPrevMonth,
                 prevMonthNumbers,
                 momentCreator().add(offset - 1, 'M').month(),
-                momentCreator().add(offset - 1, 'M').year()
+                momentCreator().add(offset - 1, 'M').year(),
+                'prev'
             );
                 
             const currentMonth = createPagePart(
                 lengthOfCurrentMonth,
                 currentMonthNumbers,
                 momentCreator().add(offset, 'M').month(),
-                momentCreator().add(offset, 'M').year()
+                momentCreator().add(offset, 'M').year(),
+                'current'
             );
             
             const lengthOfNextMonth = PAGE_LENGTH - prevMonth.length - currentMonth.length;
@@ -133,13 +143,17 @@ class App extends React.Component<void, StateType> {
                 lengthOfNextMonth,
                 nextMonthNumbers,
                 momentCreator().add(offset + 1, 'M').month(),
-                momentCreator().add(offset + 1, 'M').year()
+                momentCreator().add(offset + 1, 'M').year(),
+                'next'
             );
-            return [
-                ...prevMonth,
-                ...currentMonth,
-                ...nextMonth
-            ];
+            return {
+                page: [
+                    ...prevMonth,
+                    ...currentMonth,
+                    ...nextMonth
+                ],
+                lengthOfNextMonth: nextMonth.length
+            }
         }
         const currentPage = createPage();
         return (
@@ -189,10 +203,7 @@ class App extends React.Component<void, StateType> {
                     }
                     </ul>
                     <Page
-                        days={currentPage}
-                        currentYear={currentYear}
-                        currentMonthNumber={currentMonthNumber}
-                        currentMonth={date.format("MMMM")}
+                        days={currentPage.page}
                     />
                 </div>
             </div>

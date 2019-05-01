@@ -12,7 +12,8 @@ type PropsType = {
     isToday: boolean,
     isWeekend: boolean,
     monthName?: string | null,
-    dateString: string
+    dateString: string,
+    partName: string
 };
 
 export const Day = ({
@@ -21,7 +22,9 @@ export const Day = ({
     isToday,
     isWeekend,
     monthName,
-    dateString
+    dateString,
+    lengthOfNextMonth,
+    partName
 }: PropsType): React.Element<'li'> => {
     const todayEvents = events.filter(({
         startDate,
@@ -38,7 +41,7 @@ export const Day = ({
     })
     return (
         <li
-            css={style.dayContainer}
+            css={style.dayContainer(partName)}
         >
             {
                 number === 0
@@ -57,11 +60,18 @@ export const Day = ({
                     todayEvents.map((
                         { name, startDate, endDate }: EventType,
                         index: number
-                    ): React.Element<'li'> => (
-                        <li key={index}>
-                            <div>{name}</div>
-                        </li>
-                    ))
+                    ): React.Element<'li'> => {
+                        const formatedStartDate = startDate.split('.').reverse().join('-');
+                        return (
+                            <li key={index}>
+                                <div>
+                                    {
+                                        moment(dateString).isSame(formatedStartDate) ? name : ''
+                                    }
+                                </div>
+                            </li>
+                        );
+                    })
                 }
             </ul>
         </li>

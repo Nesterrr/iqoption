@@ -12,4 +12,7 @@ export const style = {
         padding: 0;
         margin: 0;
     `,
+    isNext: (lengthOfNextMonth: number, number: number): SerializedStyles => css`
+        background-color: ${lengthOfNextMonth === number ? `red` : ``},
+    `
 };

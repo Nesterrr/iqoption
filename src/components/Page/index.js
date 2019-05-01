@@ -8,7 +8,8 @@ import { events } from '../../events';
 type PropsType = {
     days: Array<{
         dateString: string,
-        number: number
+        number: number,
+        partName: string
     }>
 };
 
@@ -21,9 +22,11 @@ export const Page = ({
                 days.map(({
                     dateString,
                     number,
+                    partName
                 }: {
                     dateString: string,
-                    number: number
+                    number: number,
+                    partName: string
                 }, index: number): React.Element<typeof Day> => {
                     const isToday = moment(dateString).isSame(moment().format("YYYY-MM-DD"));
                     return (
@@ -33,6 +36,7 @@ export const Page = ({
                             dateString={dateString}
                             isToday={isToday}
                             dateString={dateString}
+                            partName={partName}
                         />
                     )
                 })

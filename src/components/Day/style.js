@@ -3,7 +3,7 @@ import { css } from '@emotion/core';
 import type { SerializedStyles } from '@emotion/utils';
 
 export const style = {
-    dayContainer: css`
+    dayContainer: (partName: string): SerializedStyles => css`
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
@@ -13,6 +13,25 @@ export const style = {
         list-style: none;
         border: 1px solid rgba(0, 0, 0, 0.1);
         border-collapse: collapse;
+        color: ${partName === 'next' ? `rgba(0, 0, 0, 0.5);` : ``};
+
+        & ul {
+            padding: 0;
+        }
+
+        & li {
+            box-sizing: border-box;
+            height: 24px;
+            width: 102%;
+            z-index: 4;
+            margin-bottom: 4px;
+            padding-left: 8px;
+            line-height: 24px;
+            background-color: #498fff;
+            list-style: none;
+            color: #fff;
+            font-weight: bold;
+        }
     `,
     
     today: css`
