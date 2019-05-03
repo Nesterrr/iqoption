@@ -75,7 +75,6 @@ class App extends React.Component<void, StateType> {
             lengthOfNextMonth: number
         } => {
             const PAGE_LENGTH = 42;
-            const pageDays = [];
             let firstDayOfCurrentMonth = Number(date
                 .startOf("month")
                 .format("d"));
