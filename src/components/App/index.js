@@ -75,8 +75,8 @@ class App extends React.Component<void, StateType> {
         } => {
             const PAGE_LENGTH = 42;
             let firstDayOfCurrentMonth = Number(date
-                .startOf("month")
-                .format("d"));
+                .startOf('month')
+                .format('d'));
             if (firstDayOfCurrentMonth === 0) {
                 firstDayOfCurrentMonth = 7;
             }
@@ -180,7 +180,7 @@ class App extends React.Component<void, StateType> {
                     </button>
                 </div>
                 <h2 key="header" css={style.monthYear}>
-                    { date.format("MMMM") }
+                    { date.format('MMMM') }
                     {" "}
                     { currentYear }
                     {" "}г.
