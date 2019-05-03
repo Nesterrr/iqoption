@@ -4,6 +4,7 @@ import moment from 'moment';
 import { css } from '@emotion/core';
 import { style } from './style';
 import type { EventType } from '../../types';
+import { dateFormat } from '../../utils/dateFormat';
 import { events } from '../../events';
 
 type PropsType = {
@@ -31,8 +32,8 @@ export const Day = ({
         startDate: string,
         endDate: string
     }): Array<EventType> => {
-        const formatedStartDate = startDate.split('.').reverse().join('-');
-        const formatedEndDate = endDate.split('.').reverse().join('-');
+        const formatedStartDate = dateFormat(startDate);
+        const formatedEndDate = dateFormat(endDate);
 
         return moment(dateString).isSameOrAfter(formatedStartDate)
             && moment(dateString).isSameOrBefore(formatedEndDate);
@@ -60,7 +61,7 @@ export const Day = ({
                         { name, startDate, endDate }: EventType,
                         index: number
                     ): React.Element<'li'> => {
-                        const formatedStartDate = startDate.split('.').reverse().join('-');
+                        const formatedStartDate = dateFormat(startDate);
                         return (
                             <li key={index}>
                                 {
