@@ -48,15 +48,9 @@ export const Day = ({
         <li
             css={style.dayContainer(partName, isWeekend)}
         >
-            {
-                number === 0
-                ? ("")
-                : (
-                    <span css={style.dayNumber(isToday)}>
-                        { number }
-                    </span>
-                )
-            }
+            <span css={style.dayNumber(isToday)}>
+                { number }
+            </span>
             <span>
                 { monthName }
             </span>
@@ -69,13 +63,11 @@ export const Day = ({
                         const formatedStartDate = startDate.split('.').reverse().join('-');
                         return (
                             <li key={index}>
-                                <div>
-                                    {
-                                        moment(dateString).isSame(formatedStartDate)
-                                        || currenWeekDay === FIRST_DAY_OF_WEEK
-                                        ? name : ''
-                                    }
-                                </div>
+                                {
+                                    moment(dateString).isSame(formatedStartDate)
+                                    || currenWeekDay === FIRST_DAY_OF_WEEK
+                                    ? name : ''
+                                }
                             </li>
                         );
                     })
