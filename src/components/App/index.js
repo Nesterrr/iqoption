@@ -64,7 +64,6 @@ class App extends React.Component<void, StateType> {
         } = this.state;
 
         const currentYear = date.year();
-        const currentMonthNumber = date.month();
 
         const createPage = (): {
             page: Array<{
