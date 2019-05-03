@@ -27,13 +27,13 @@ export const Page = ({
                 partName: string
             }, index: number): React.Element<typeof Day> => {
                 const isToday = moment(dateString).isSame(moment().format("YYYY-MM-DD"));
+
                 return (
                     <Day
                         key={`${dateString}-${number}-${index}`}
                         number={number}
                         dateString={dateString}
                         isToday={isToday}
-                        dateString={dateString}
                         partName={partName}
                     />
                 )

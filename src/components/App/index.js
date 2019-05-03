@@ -100,9 +100,9 @@ class App extends React.Component<void, StateType> {
                     partName: string
                 } => {
                     const dateString = momentCreator().
+                        year(yearNumber).
                         date(day).
                         month(monthNumber).
-                        year(yearNumber).
                         format('YYYY-MM-DD');
                     return ({
                         number: day,
