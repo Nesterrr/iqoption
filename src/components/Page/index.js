@@ -3,7 +3,6 @@ import * as React from 'react';
 import moment from 'moment';
 import { Day } from '../Day';
 import { style } from './style';
-import { events } from '../../events';
 
 type PropsType = {
     days: Array<{
