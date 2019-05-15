@@ -9,6 +9,7 @@ export const style = {
         align-items: center;
         width: 1200px;
         height: 1000px;
+        font-family: San Francisco, Helvetica, system-ui, Arial;
         outline: 2px solid rgba(0, 0, 0, 0.1);
     `,
     calendarContainer: css`

@@ -21,19 +21,9 @@ export const style = {
             padding: 0;
         }
 
-        & li {
-            box-sizing: border-box;
-            height: 24px;
-            width: 102%;
-            z-index: 4;
-            margin-bottom: 4px;
-            padding-left: 8px;
-            line-height: 24px;
-            background-color: #498fff;
-            list-style: none;
-            color: #fff;
-            font-weight: bold;
-        }
+        // & li {
+            
+        // }
     `,
     
     today: css`
@@ -57,6 +47,46 @@ export const style = {
             width: 30px;
             height: 30px;
             color: #fff;
+        ` : ``}
+    `,
+
+    eventContainer: css`
+        // position: relative;
+        // display: flex;
+        // flex-direction: column;
+        // justify-content: space-between;
+    `,
+
+    event: (isEventNameVisible: boolean, isSunday: boolean): SerializedStyles => console.log(isEventNameVisible) || css`
+        position: relative;
+        box-sizing: border-box;
+        height: 24px;
+        width: 102%;
+        // padding-right: 10px;
+        z-index: 4;
+        margin-bottom: 4px;
+        padding-left: 8px;
+        line-height: 24px;
+        background-color: #498fff;
+        list-style: none;
+        color: #fff;
+        font-weight: bold;
+
+        ${isEventNameVisible ? `
+            z-index: 9999;
+            & span {
+                position: absolute;
+                overflow: visible;
+                width: 900px;
+            }
+        ` : ``}
+        ${isSunday ? `
+            & span {
+                width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
         ` : ``}
     `
 };

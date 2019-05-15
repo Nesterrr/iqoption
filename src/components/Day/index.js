@@ -43,7 +43,8 @@ export const Day = ({
     const SATURDAY = 6;
     const SUNDAY = 0;
     const FIRST_DAY_OF_WEEK = 1;
-    const isWeekend = currenWeekDay === SATURDAY || currenWeekDay === SUNDAY;
+    const isSunday = currenWeekDay === SUNDAY;
+    const isWeekend = isSunday || currenWeekDay === SATURDAY;
 
     return (
         <li
@@ -55,20 +56,29 @@ export const Day = ({
             <span>
                 { monthName }
             </span>
-            <ul>
+            <ul css={style.eventContainer}>
                 {
                     todayEvents.map((
                         { name, startDate, endDate }: EventType,
                         index: number
                     ): React.Element<'li'> => {
                         const formatedStartDate = dateFormat(startDate);
+                        const isEventNameVisible = moment(dateString).isSame(formatedStartDate) || currenWeekDay === FIRST_DAY_OF_WEEK
+                        console.log(
+                            'isEventNameVisible: ',
+                            isEventNameVisible,
+                        );
                         return (
-                            <li key={index}>
-                                {
-                                    moment(dateString).isSame(formatedStartDate)
-                                    || currenWeekDay === FIRST_DAY_OF_WEEK
-                                    ? name : ''
-                                }
+                            <li
+                                css={style.event(isEventNameVisible, isSunday)}
+                                key={index}
+                            >
+                                <span>
+                                    {
+                                        isEventNameVisible
+                                        ? name : ''
+                                    }
+                                </span>
                             </li>
                         );
                     })
